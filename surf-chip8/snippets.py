@@ -45,9 +45,15 @@ def snippet(id):
         snippet = dbs.query(Snippet).get(id)
         if not snippet:
             return send_response('Snippet not found', 404)
+
+        name = request.json['name']
+        source = request.json['source']
+
+        if (name == '') or (source == ''):
+            return send_response('Empty name or source', 400)
         
-        snippet.name = request.json['name']
-        snippet.source = request.json['source']
+        snippet.name = name
+        snippet.source = source
 
         try:
             dbs.add(snippet)
@@ -75,11 +81,14 @@ def create_new_snippet():
     
     
     if request.method == 'POST':
-        snippet = Snippet(
-            name = request.json['name'],
-            source = request.json['source'],
-            author = g.user)
+        name = request.json['name']
+        source = request.json['source']
+
+        if (name == '') or (source == ''):
+            return send_response('Empty name or source', 400)
         
+        snippet = Snippet(name=name, source=source, author = g.user)
+                
         try:
             dbs.add(snippet)
             dbs.commit()
@@ -90,35 +99,6 @@ def create_new_snippet():
         
     else:
         return render_template('snippets/edit.html', snippet=None)
-
-
-@bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@login_required
-def snippet_edit(id):
-    dbs = get_db_session()
-    snippet = dbs.query(Snippet).get(id)
-
-    if not snippet:
-        flash("Page not found.")
-        return redirect(url_for("index"))
-    
-    if snippet.author != g.user:
-            flash("You are not author of this snippet.")
-            return redirect(url_for('snippets.snippet_view', id=id))
-    
-    if request.method == 'POST':
-        name = request.form['name']
-        source = request.form['source']
-        snippet.name = name
-        snippet.source = source
-        dbs.add(snippet)
-        
-        try:
-            dbs.commit()
-        except:
-            dbs.rollback()
-
-    return render_template('snippets/edit.html', snippet=snippet)
 
 @bp.route('/<int:id>/play')
 def snippet_play(id):

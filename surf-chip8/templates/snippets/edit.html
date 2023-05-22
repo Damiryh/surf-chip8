@@ -2,51 +2,13 @@
 {% block title %}edit{% endblock %}
 {% block content %}
 <div>
-    <button onclick="create_snippet()">Save as</button>
-    <button onclick="save_snippet()">Save</button>
-    <button onclick="delete_snippet()">Delete</button>
+    <script src="{{ url_for('static', filename='editor.js') }}"></script>
 
-    <input name="name" type="text" value="{% if snippet %}{{ snippet.name }}{% endif %}"><br>
+    <button onclick="createNewSnippet()">Save as</button>
+    <button onclick="saveSnippet({{ snippet.id }})">Save</button>
+    <button onclick="deleteSnippet({{ snippet.id }})">Delete</button>
+    
+    <input name="name" type="text" value="{% if snippet %}{{ snippet.name }}{% endif %}">
     <textarea name="source" spellcheck="false" style="width: 700px; height: 600px;">{% if snippet %}{{ snippet.source }}{% endif %}</textarea>
-    <script>
-        function send_requset(method, url, data) {
-            let xhr = new XMLHttpRequest();
-
-            xhr.open(method, url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-            xhr.send(JSON.stringify(data));
-
-            xhr.onload = function() {
-                alert(JSON.parse(xhr.responseText).message)
-            }
-        }
-
-        function create_snippet() {
-           let data = {
-                'name': document.getElementsByName('name')[0].value,
-                'source': document.getElementsByName('source')[0].value
-            }
-
-            send_requset('POST', '{{ url_for("snippets.create_new_snippet") }}', data)
-        }
-
-        {% if snippet %}
-        
-        function save_snippet() {
-            let data = {
-                'name': document.getElementsByName('name')[0].value,
-                'source': document.getElementsByName('source')[0].value
-            }
-
-            send_requset('PUT', '{{ url_for("snippets.snippet", id=snippet.id) }}', data)
-        }
-
-        function delete_snippet(id) {
-            send_requset('DELETE', '{{  url_for("snippets.snippet", id=snippet.id) }}', "{}")
-            
-        }
-
-        {% endif %}
-    </script>
 </div>
 {% endblock %}
