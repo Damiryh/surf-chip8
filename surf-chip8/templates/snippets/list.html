@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}list{% endblock %}
+{% block content %}
+    <style>
+        table { border: 1px solid black; }
+        td { border: 1px solid black; }
+    </style>
+    {% if snippets %}
+        <div class="snippets-list">
+            <table>
+                {% for snippet in snippets %}
+                    <tr>
+                        <td><a href="{{ url_for('snippets.snippet', id=snippet.id) }}">{{ snippet.name }}</a></td>
+                        <td>{{ snippet.author.name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-snippets-list">Пусто.</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Main page{% endblock %}
+{% block content %}
+<h1>Hello!</h1>
+
+{% if user %}
+<a href="{{ url_for('snippets.snippets_list') }}">List of snippets</a>
+<a href="{{ url_for('snippets.create_new_snippet') }}">Create a new snippet</a>
+{% else %}
+<a href="{{ url_for('snippets.snippets_list') }}">List of snippets</a>
+<a href="{{ url_for('auth.sign_in') }}">Sign in</a>
+<a href="{{ url_for('auth.sign_up') }}">Sign up</a>
+{% endif %}
+
+
+{% endblock %}
+

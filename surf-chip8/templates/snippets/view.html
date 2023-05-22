@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}view{% endblock %}
+{% block content %}
+<div>
+    <p>Name: {{ snippet.name }}</p>
+    <textarea name="source" spellcheck="false" disabled style="width: 700px; height: 600px;">{{ snippet.source }}</textarea>
+</div>
+{% endblock %}
