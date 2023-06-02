@@ -1,5 +1,5 @@
-from mytoken import *
-from myast import *
+from .mytoken import *
+from .myast import *
 
 ARGS = {
     (TokenType.KEYWORD, 'K'): ArgType.KEY,
@@ -54,7 +54,10 @@ class Parser:
     def instruction(self):
         i = Instruction(self.curr().value, self.curr().location); self.next()
 
-        if self.curr().type in [TokenType.MNEMONIC]: return i
+        if self.curr().type in [TokenType.MNEMONIC, TokenType.EOF]: return i
+        if self.curr().value == '.': return i
+        if self.tokens[self.pos+1].value == ':': return i
+        
         i.append(self.argument())
 
         while self.match(TokenType.SYMBOL, ','):
@@ -65,7 +68,10 @@ class Parser:
     def directive(self):
         i = Directive(self.curr().value, self.curr().location); self.next()
 
-        if self.curr().type in [TokenType.MNEMONIC]: return i
+        if self.curr().type in [TokenType.MNEMONIC, TokenType.EOF]: return i
+        if self.curr().value == '.': return i
+        if self.tokens[self.pos+1].value == ':': return i
+        
         i.append(self.argument())
     
         while self.match(TokenType.SYMBOL, ','):
@@ -103,3 +109,5 @@ class Parser:
             v = Number(self.curr().value)
             self.next()
             return v
+        else:
+            raise ChipSyntaxError(self.curr().location, "Unexcepted end of args")

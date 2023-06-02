@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}edit{% endblock %}
+{% block content %}
+<div class="form-group m-2">
+    <h3>{{ snippet.name }}</h3>
+	<a class="btn" href="{{ url_for('snippets.snippet', id=snippet.id) }}">To code</a>
+</div>
+<div class="form-group m-2 d-flex justify-content-center">
+	<div style="max-width: 1000px;">
+		<canvas class="w-100" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+	</div>
+</div>
+<script>$SNIPPET_ID = {% if snippet  %}{{ snippet.id }}{% else %}0{% endif %}</script>
+ <script>
+	fetch(`/snippets/${$SNIPPET_ID}/assemble?binary=0`)
+    .then( response => {
+		if (!response.ok) {
+			response.json().then( response => {
+				$('.toast-header span')[0].textContent = "Ошибка сборки";
+				$('.toast-body')[0].textContent = response.message;
+				$('.toast').toast('show');
+			});
+			setTimeout(() => location.assign(`/snippets/${$SNIPPET_ID}`), 2000);
+		}
+	});
+    
+ 
+    function setup_files() {
+        FS.mkdir('resources');
+        FS.createPreloadedFile('resources', 'font.rom', "{{ url_for('get_chip_file', path='font.rom') }}", true, false);
+        FS.createPreloadedFile('resources', 'program.ch8', `/snippets/${$SNIPPET_ID}/assemble?binary=1`, true, false);
+        //FS.createPreloadedFile('resources', 'program.ch8', '/snippets/2/assemble?binary=1', true, false);
+    }
+    
+    var Module = {
+        preRun: [setup_files],
+        postRun: [],
+        canvas: (function() { return document.getElementById('canvas')})()
+    };
+</script>
+<script src="{{ url_for('get_chip_file',  path='chip8-wasm.js')  }}"></script>
+{% endblock %}

@@ -132,7 +132,6 @@ def vx_dest(opcode, args, env):
 
 def narg(opcode, args, env): pass
 
-
 INSTRUCTION_SET = {
     ('cls', tuple()): 0x00e0,
     ('ret', tuple()): 0x00ee,
@@ -203,7 +202,9 @@ class Instruction(Statement):
 
         opcode = INSTRUCTION_SET[form]
 
-        if form[1] == (ArgType.REG, ArgType.REG):
+        if form[1] == tuple():
+            pass
+        elif form[1] == (ArgType.REG, ArgType.REG):
             opcode = vx_vy(opcode, self.args, env)
         elif form[1] == (ArgType.REG, ArgType.BYTE):
             opcode = vx_kk(opcode, self.args, env)

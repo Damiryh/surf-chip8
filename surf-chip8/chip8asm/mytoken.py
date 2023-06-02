@@ -77,7 +77,7 @@ def trim_space(source, start):
 def tokenize_word(source, start):
     end = start.next(len(source))
     for i in range(start.pos, len(source)):
-        if not source[i].isalnum():
+        if (not source[i].isalnum()) and (not source[i] == '_'):
             end = start.next(i)
             break
 
@@ -119,6 +119,20 @@ def tokenize_hex(source, start):
 
     return Token(type_, value, start), end
 
+def tokenize_bin(source, start):
+    start.step()
+    end = start.next(len(source))
+    for i in range(start.pos, len(source)):
+        if not source[i] in ['0', '1']:
+            end = start.next(i)
+            if source[end.pos].isalnum(): raise TokenizeError(start, "Wrong BIN")
+            break
+    
+    value = int(source[start.pos:end.pos], 2)
+    type_ = TokenType.NUMBER
+
+    return Token(type_, value, start), end
+
 def tokenize_symbol(source, start):
     token = Token(TokenType.SYMBOL, source[start.pos], start)
     end = start.copy(); end.step()
@@ -154,10 +168,12 @@ def tokenize(path, source):
             token, location = tokenize_symbol(source, location)
         elif source[location.pos] == ';':
             token, location = tokenize_comment(source, location)
+        elif source[location.pos] == '$':
+            token, location = tokenize_bin(source, location)
         
         if token: tokens.append(token)
 
-    tokens.append(Token(TokenType.EOF, '', len(source)))
+    tokens.append(Token(TokenType.EOF, '', location))
     return tokens
 
 if __name__ == '__main__':

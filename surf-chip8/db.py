@@ -4,7 +4,7 @@ from flask import current_app, g
 from .model import *
 import click
 
-engine = create_engine("sqlite:///database.db", echo=True)
+engine = create_engine("sqlite:///database.db", echo=False)
 
 def get_db_session():
     if 'db_session' not in g:

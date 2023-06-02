@@ -2,13 +2,25 @@
 {% block title %}edit{% endblock %}
 {% block content %}
 <div>
-    <script src="{{ url_for('static', filename='editor.js') }}"></script>
-
-    <button onclick="createNewSnippet()">Save as</button>
-    <button onclick="saveSnippet({{ snippet.id }})">Save</button>
-    <button onclick="deleteSnippet({{ snippet.id }})">Delete</button>
-    
-    <input name="name" type="text" value="{% if snippet %}{{ snippet.name }}{% endif %}">
-    <textarea name="source" spellcheck="false" style="width: 700px; height: 600px;">{% if snippet %}{{ snippet.source }}{% endif %}</textarea>
+    <div class="form-group m-2">
+        <button id="save-as" class="btn">Сохранить как</button>
+        <button id="save" class="btn">Сохранить</button>
+        <button id="delete" class="btn">Удалить</button>
+        <button id="assemble" class="btn">Собрать</button>
+        <button id="run" class="btn">Запустить</button>
+    </div>
+    <div class="form-group m-2">
+        <label for="name">Название</label>
+        <input id="name" class="form-control" name="name" type="text" value="{% if snippet %}{{ snippet.name }}{% endif %}">
+    </div>
+    <div class="form-group m-2 d-flex justify-content-center">
+        <div class="w-75">
+            <label for="source">Код</label>
+            <label id="location">0:1:1</label>
+            <textarea onkeyup="getLineAndColumn(this);" onmouseup="getLineAndColumn(this);" id="source" class="w-100 form-control" name="source" rows="25" spellcheck="false">{% if snippet %}{{ snippet.source }}{% endif %}</textarea>
+        </div>
+    </div>
 </div>
+<script> $SNIPPET_ID = {% if snippet %}{{ snippet.id }}{% else %}undefined{% endif %}; </script>
+<script src="{{ url_for('static', filename='editor.js') }}"></script>
 {% endblock %}

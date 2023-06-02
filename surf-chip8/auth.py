@@ -21,24 +21,27 @@ def sign_up():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        password2 = request.form['password2']
 
         dbs = get_db_session()
         error = None
         
         if not username:
-            error = 'Username is required.'
+            error = 'Введите имя'
         elif not password:
-            error = 'Password is required.'
+            error = 'Введите пароль'
+        elif password != password2:
+            error = 'Введенные пароли не совпадают'
 
         if error is None:
             user = User(username, password)
-            dbs.add(user)
-
+            
             try:
+                dbs.add(user)
                 dbs.commit()
             except:
                 dbs.rollback()
-                error = "Sign up error!"
+                error = "Ошибка при регистрации! Попробуйте другое имя."
             else:
                 return redirect(url_for('auth.sign_in'))
 
@@ -62,7 +65,7 @@ def sign_in():
             user = None
         
         if (user is None) or (not user.check_password(password)):
-            error = 'Incorrect username or password.'
+            error = 'Неверное имя или пароль'
 
         if error is None:
             session.clear()
@@ -86,7 +89,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
         if g.user is None:
-            flash("Sign in for access to this page.")
+            flash("Войдите, прежде чем перейти на эту страницу.")
             return redirect(url_for('auth.sign_in'))
         return view(*args, **kwargs)
     return wrapped_view

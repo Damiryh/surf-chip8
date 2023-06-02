@@ -1,19 +1,25 @@
 {% extends "base.html" %}
 {% block title %}list{% endblock %}
 {% block content %}
-    <style>
-        table { border: 1px solid black; }
-        td { border: 1px solid black; }
-    </style>
     {% if snippets %}
-        <div class="snippets-list">
-            <table>
+        <div class="snippets-list m-2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Snippet</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Emulator</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for snippet in snippets %}
                     <tr>
                         <td><a href="{{ url_for('snippets.snippet', id=snippet.id) }}">{{ snippet.name }}</a></td>
                         <td>{{ snippet.author.name }}</td>
+                        <td><a href="{{ url_for('snippets.run_snippet', id=snippet.id ) }}">Run</a></td>
                     </tr>
                 {% endfor %}
+                </tbody>
             </table>
         </div>
     {% else %}

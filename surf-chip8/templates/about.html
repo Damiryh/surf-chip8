@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Main page{% endblock %}
+{% block content %}
+<div class="m-4">
+    <h3>О сайте</h3>
+    <p>
+       CHIP-8 — интерпретируемый язык программирования, который был
+       разработан Джозефом Вейзбекером в семидесятых для использования
+       в RCA COSMAC VIP. В дальнейшем был использован в COSMAC ELF,
+       Telmac 1800, ETI 660, DREAM 6800. Сегодня CHIP-8 часто
+       используется для обучения базовым навыкам эмуляции в связи со
+       своей простотой и схожестью с реальными платформами. 
+    </p>
+    <h3>Архитектура</h3>
+    <table class="w-100 mt-4 mb-4">
+        <tr>
+            <th class="p-2 border">Регистры</th>
+            <th class="p-2 border">Разрядность</th>
+            <th class="p-2 border">Описание</th>
+        </tr>
+        <tr>
+            <td class="p-2 border">@0, @1, ... @15</td>
+            <td class="p-2 border">8 бит</td>
+            <td class="p-2 border">Регистры общего назначения</td>
+        </tr>
+        <tr>
+            <td class="p-2 border">@15; @#F</td>
+            <td class="p-2 border">8 бит</td>
+            <td class="p-2 border">Регистр-флаг</td>
+        </tr>
+        <tr>
+            <td class="p-2 border">ST</td>
+            <td class="p-2 border">8 бит</td>
+            <td class="p-2 border">
+                Sound Timer - Таймер звука: декрементируется до нуля с частотой 60 Гц.
+                При ненулевом значении проигрывает звук "BEEP"
+            </td>
+        </tr>
+        <tr>
+            <td class="p-2 border">DT</td>
+            <td class="p-2 border">8 бит</td>
+            <td class="p-2 border">
+                Data Timer - Таймер задержки: декрементируется до нуля с частотой 60 Гц
+            </td>
+        </tr>
+        <tr>
+            <td class="p-2 border">PC</td>
+            <td class="p-2 border">16 бит</td>
+            <td class="p-2 border">Указатель на исполняемую инструкцию</td>
+        </tr>
+        <tr>
+            <td class="p-2 border">SP</td>
+            <td class="p-2 border">16 бит</td>
+            <td class="p-2 border">Указатель на вершину стека</td>
+        </tr>
+    </table>
+
+    <h3>Адресное пространство</h3>
+    <table class="w-100 mt-4 mb-4">
+        <tr>
+            <th class="p-2 border w-25">Фрагмент</th>
+            <th class="p-2 border">Описание</th>
+        </tr>
+        <tr>
+            <td class="p-2 border">#200 - #FFF</td>
+            <td class="p-2 border">Память для пользовательских программ</td>
+        </tr>
+        <tr>
+            <td class="p-2 border">#000 - #1FF</td>
+            <td class="p-2 border">ROM память: Спрайты цифр от '0' до 'F'; системные программы</td>
+        </tr>
+    </table>
+
+    <h3>Клавиатура CHIP-8</h3>
+    <table class="m-3"><tr>
+    <td class="border p-2">1</td>
+    <td class="border p-2">2</td>
+    <td class="border p-2">3</td>
+    <td class="border p-2">C
+    </td></tr>
+    <tr>
+    <td class="border p-2">4</td>
+    <td class="border p-2">5</td>
+    <td class="border p-2">6</td>
+    <td class="border p-2">D
+    </td></tr>
+    <tr>
+    <td class="border p-2">7</td>
+    <td class="border p-2">8</td>
+    <td class="border p-2">9</td>
+    <td class="border p-2">E
+    </td></tr>
+    <tr>
+    <td class="border p-2">A</td>
+    <td class="border p-2">0</td>
+    <td class="border p-2">B</td>
+    <td class="border p-2">F
+    </td></tr></table>
+
+    <h3>Расположение клавиш на раскладке QWERTY</h3>
+    <table class="m-3"><tr>
+    <td class="border p-2">1</td>
+    <td class="border p-2">2</td>
+    <td class="border p-2">3</td>
+    <td class="border p-2">4</td>
+    </tr>
+    <tr>
+    <td class="border p-2">q</td>
+    <td class="border p-2">w</td>
+    <td class="border p-2">e</td>
+    <td class="border p-2">r</td>
+    </tr>
+    <tr>
+    <td class="border p-2">a</td>
+    <td class="border p-2">s</td>
+    <td class="border p-2">d</td>
+    <td class="border p-2">f</td>
+    </tr>
+    <tr>
+    <td class="border p-2">z</td>
+    <td class="border p-2">x</td>
+    <td class="border p-2">c</td>
+    <td class="border p-2">v</td>
+    </tr></table>
+</div>
+{% endblock %}
+

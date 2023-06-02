@@ -19,7 +19,6 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(500), nullable=False)
-
     snippets: Mapped[List["Snippet"]] = relationship(back_populates="author")
     
     def __init__(self, username, password):
